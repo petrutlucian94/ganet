@@ -40,8 +40,9 @@ class Population(object):
         children = []
 
         pair = None
-        for chromosome in chromosomes:
-            chromosome.mutate()
+        for chromosome in (elites + chromosomes):
+            if not chromosome in elites:
+                chromosome.mutate()
 
             should_crossover = random.random() < self._crossover_rate
             if should_crossover:
@@ -52,7 +53,7 @@ class Population(object):
                 else:
                     pair = chromosome
 
-        self._chromosomes = elites + chromosomes
+        self._chromosomes = elites + chromosomes + children
         self.sort()
         self._chromosomes = self._chromosomes[:self._size]
 
