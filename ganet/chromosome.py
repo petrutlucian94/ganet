@@ -1,4 +1,6 @@
+import colorsys
 import copy
+import math
 import random
 
 import networkx as nx
@@ -84,3 +86,36 @@ class Chromosome(object):
 
             score += power_mean
         return score
+
+    def draw(self):
+        network = self._base_network.copy()
+        for idx, subgraph_nodes in enumerate(nx.connected_components(
+                self._network)):
+            color = self._get_rand_distinct_color(idx + 1)
+            for node in subgraph_nodes:
+                network.node[node]['group'] = idx
+                network.node[node]['color'] = color
+
+        node_colors = [network.node[node]['color'] for node in network]
+        network.draw(node_color=node_colors)
+
+    def _get_rand_distinct_color(self, idx):
+        phi = (1 + math.sqrt(5)) / 2
+        n = idx * phi - math.floor(idx * phi)
+
+        h = math.floor(n * 360)
+        l = 150 + random.random() * 50
+        s = 190 + random.random() * 50
+
+        rgb = colorsys.hls_to_rgb(h / 360, l / 360, s / 360)
+        color = ''
+        for channel in rgb:
+            color += '{:02X}'.format(int(channel * 255))
+        return '#%s' % color
+
+    def get_info(self):
+        communities = [com
+                       for com in nx.connected_components(self._network)]
+        info = {'score': self.get_score(),
+                'communities': len(communities)}
+        return info

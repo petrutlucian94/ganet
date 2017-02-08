@@ -24,6 +24,8 @@ class Network(nx.Graph):
                 # self.add_node(node)
                 self.add_edge(*vertex)
 
-    def draw(self):
-        nx.draw(self)
+    def draw(self, *args, **kwargs):
+        kwargs['node_size'] = kwargs.get('node_size') or 100
+
+        nx.draw(self, *args, **kwargs)
         plt.show()

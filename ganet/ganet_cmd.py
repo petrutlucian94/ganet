@@ -1,3 +1,6 @@
+import warnings
+warnings.filterwarnings("ignore")
+
 import argparse
 
 from ganet import conf
@@ -24,9 +27,11 @@ if __name__ == '__main__':
     generation_count = conf.CONF['generation_count']
 
     for generation in range(generation_count):
-        print("Processing generation step: %s" % generation)
         population.step()
+        if not (generation % 20) or generation == (generation_count - 1):
+            print("Processed generation step: %s" % generation)
+            print('Fittest element info: %s' %
+                  population.get_fittest().get_info())
 
     fittest = population.get_fittest()
-    nw = fittest._network
-    nw.draw()
+    fittest.draw()
