@@ -83,8 +83,9 @@ class Chromosome(object):
                 power_mean += pow(mean, self._score_mean_order)
 
             power_mean /= len(adj_matrix)
+            volume = adj_matrix.sum()
 
-            score += power_mean
+            score += power_mean * volume
         return score
 
     def draw(self):
