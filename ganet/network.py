@@ -5,6 +5,8 @@ import networkx as nx
 
 
 class Network(nx.Graph):
+    _cached_neighbors = {}
+
     def load_from_file(self, path):
         pattern = re.compile(r'(\d+)(?:[ ,;]*)(\d+)')
         get_node = lambda x: int(x) - 1

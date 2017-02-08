@@ -1,9 +1,9 @@
-import random
 import math
+import random
 
-from ganet import crossover as ga_crossover
 from ganet import chromosome as ga_chromo
 from ganet import conf
+from ganet import crossover as ga_crossover
 
 
 class Population(object):
@@ -32,16 +32,14 @@ class Population(object):
 
         if self._elite_count:
             elites = self._chromosomes[:self._elite_count]
-            chromosomes = self._chromosomes[self._elite_count:]
         else:
             elites = []
-            chromosomes = self._chromosomes
 
         children = []
 
         pair = None
-        for chromosome in (elites + chromosomes):
-            if not chromosome in elites:
+        for chromosome in self._chromosomes:
+            if chromosome not in elites:
                 chromosome.mutate()
 
             should_crossover = random.random() < self._crossover_rate
@@ -53,7 +51,7 @@ class Population(object):
                 else:
                     pair = chromosome
 
-        self._chromosomes = elites + chromosomes + children
+        self._chromosomes += children
         self.sort()
         self._chromosomes = self._chromosomes[:self._size]
 
