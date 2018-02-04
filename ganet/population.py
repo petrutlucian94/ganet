@@ -48,6 +48,7 @@ class Population(object):
                     crossover = ga_crossover.UniformCrossOver(pair, chromosome)
                     child = crossover.get_child()
                     children.append(child)
+                    pair = None
                 else:
                     pair = chromosome
 
